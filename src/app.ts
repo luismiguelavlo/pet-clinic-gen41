@@ -1,21 +1,13 @@
-import express, { Request, Response } from "express";
+import { AppRoutes } from "./presentation/routes";
+import { Server } from "./presentation/server";
 
-const app = express();
-app.use(express.json());
-
-app.get("/", (req: Request, res: Response) => {
-  res.status(200).json({
-    message: "Get request to the homepage",
+async function main() {
+  const server = new Server({
+    port: 4000,
+    routes: AppRoutes.routes,
   });
-});
 
-app.post("/", async (req: Request, res: Response) => {
-  console.log(req.body);
-  res.status(200).json({
-    message: "Post request to the homepage",
-  });
-});
+  await server.start();
+}
 
-app.listen(3000, () => {
-  console.log("Server is running on port 3000");
-});
+main();
