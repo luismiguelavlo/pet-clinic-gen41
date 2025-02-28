@@ -1,4 +1,4 @@
-import express, { Request, Response, Router } from "express";
+import express, { Router } from "express";
 
 /**
  * Interface representing the configuration options for the Express server.
