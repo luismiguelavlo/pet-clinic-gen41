@@ -8,8 +8,10 @@ export class UserRoutes {
     const controller = new UserController();
 
     router.get("/", controller.findAll);
-
     router.post("/register", controller.register);
+    router.get("/:id", controller.findOne);
+    router.patch("/:id", controller.update);
+    router.delete("/:id", controller.delete);
 
     return router;
   }

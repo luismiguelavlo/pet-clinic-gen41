@@ -3,7 +3,7 @@ import { Server } from "./presentation/server";
 
 async function main() {
   const server = new Server({
-    port: 4000,
+    port: 3000,
     routes: AppRoutes.routes,
   });
 
