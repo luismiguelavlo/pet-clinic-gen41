@@ -1,11 +1,16 @@
 import { Request, Response, Router } from "express";
 import { UserController } from "./controller";
+import { FinderUsersService } from "./services/finder-users.service";
+import { RegisterUserService } from "./services/register-user.service";
 
 export class UserRoutes {
   static get routes(): Router {
     const router = Router();
 
-    const controller = new UserController();
+    const finderUsers = new FinderUsersService();
+    const registerUser = new RegisterUserService();
+
+    const controller = new UserController(registerUser, finderUsers);
 
     router.get("/", controller.findAll);
     router.post("/register", controller.register);

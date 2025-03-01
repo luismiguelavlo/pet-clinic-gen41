@@ -1,20 +1,25 @@
 import { Request, Response } from "express";
+import { RegisterUserService } from "./services/register-user.service";
+import { FinderUsersService } from "./services/finder-users.service";
 
 export class UserController {
-  constructor() {} //TODO: Aca necesito llamar al servicio y hacer DI
+  constructor(
+    private readonly registerUser: RegisterUserService,
+    private readonly finderUsers: FinderUsersService
+  ) {}
 
   findAll = (req: Request, res: Response) => {
-    return res.status(200).json({
-      message: "Get request to the homepage from the user controller class",
-    });
+    this.finderUsers
+      .execute()
+      .then((users) => res.status(200).json(users))
+      .catch((err) => res.status(500).json({ message: err.message }));
   };
 
   register = (req: Request, res: Response) => {
-    console.log(req.body);
-    return res.status(200).json({
-      message:
-        "Register request to the homepage from the user controller class",
-    });
+    this.registerUser
+      .execute()
+      .then((message) => res.status(201).json(message))
+      .catch((err) => res.status(500).json({ message: err.message }));
   };
 
   findOne = (req: Request, res: Response) => {
