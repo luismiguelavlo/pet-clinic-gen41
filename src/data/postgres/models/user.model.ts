@@ -1,13 +1,3 @@
-// Table user {
-//   id uuid [pk]
-//   fullname varchar(70) [not null]
-//   password varchar(255) [not null]
-//   email varchar(50) [unique, not null]
-//   phone_number varchar(20) [not null]
-//   role UserRole [default: 'user', not null]
-//   status boolean [default: false, not null]
-//   created_at timestamp [default: 'now()', not null]
-// }
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 export enum UserRole {
