@@ -1,9 +1,9 @@
-import { DataSource } from "typeorm";
-import { User } from "./models/user.model";
-import { Pet } from "./models/pet.model";
-import { Doctor } from "./models/doctor.model";
-import { Specie } from "./models/specie.model";
-import { Appointment } from "./models/appointment.model";
+import { DataSource } from 'typeorm';
+import { User } from './models/user.model';
+import { Pet } from './models/pet.model';
+import { Doctor } from './models/doctor.model';
+import { Specie } from './models/specie.model';
+import { Appointment } from './models/appointment.model';
 
 interface Options {
   host: string;
@@ -46,7 +46,7 @@ export class PostgresDatabase {
    */
   constructor(options: Options) {
     this.datasource = new DataSource({
-      type: "postgres",
+      type: 'postgres',
       host: options.host,
       port: options.port,
       username: options.username,
@@ -71,7 +71,7 @@ export class PostgresDatabase {
   async connect() {
     try {
       await this.datasource.initialize();
-      console.log("Connected to database 😊");
+      console.log('Connected to database 😊');
     } catch (error) {
       console.error(error);
     }

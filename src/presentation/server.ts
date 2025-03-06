@@ -1,4 +1,4 @@
-import express, { Router } from "express";
+import express, { Router } from 'express';
 
 /**
  * Interface representing the configuration options for the Express server.
@@ -33,6 +33,9 @@ export class Server {
 
   /**
    * Start the Express Server.
+   *
+   * @remarks
+   * Este metodo debe ser llamado para ejecutar el servidor de express.
    */
   async start() {
     this.app.use(express.json());
