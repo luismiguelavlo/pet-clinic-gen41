@@ -1,56 +1,56 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum UserRole {
-  ADMIN = "admin",
-  USER = "user",
-  DOCTOR = "doctor",
+  ADMIN = 'admin',
+  USER = 'user',
+  DOCTOR = 'doctor',
 }
 
 @Entity()
 export class User extends BaseEntity {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column("varchar", {
+  @Column('varchar', {
     length: 70,
     nullable: false,
   })
   fullname: string;
 
-  @Column("varchar", {
+  @Column('varchar', {
     length: 255,
     nullable: false,
   })
   password: string;
 
-  @Column("varchar", {
+  @Column('varchar', {
     length: 50,
     nullable: false,
     unique: true,
   })
   email: string;
 
-  @Column("varchar", {
+  @Column('varchar', {
     length: 20,
     nullable: false,
   })
   phone_number: string;
 
-  @Column("enum", {
+  @Column('enum', {
     enum: UserRole,
     default: UserRole.USER,
     nullable: false,
   })
   rol: UserRole;
 
-  @Column("boolean", {
+  @Column('boolean', {
     default: false,
     nullable: false,
   })
   status: boolean;
 
-  @Column("timestamp", {
-    default: () => "CURRENT_TIMESTAMP",
+  @Column('timestamp', {
+    default: () => 'CURRENT_TIMESTAMP',
     nullable: false,
   })
   created_at: Date;
