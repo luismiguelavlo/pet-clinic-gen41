@@ -1,7 +1,8 @@
 import { User } from '../../../data/postgres/models/user.model';
+import { UpdateUserDto } from '../../../domain';
 
 export class UpdateUserService {
-  async execute(userId: string, userData: any) {
+  async execute(userId: string, userData: UpdateUserDto) {
     const user = await this.ensureUserExists(userId);
 
     user.fullname = userData.fullname;

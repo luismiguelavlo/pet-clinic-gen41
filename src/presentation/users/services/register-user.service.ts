@@ -1,14 +1,14 @@
 import { User } from '../../../data/postgres/models/user.model';
+import { RegisterUserDto } from '../../../domain';
 
 export class RegisterUserService {
-  async execute(userData: any) {
+  async execute(userData: RegisterUserDto) {
     const user = new User();
 
     user.fullname = userData.fullname;
     user.email = userData.email;
     user.password = userData.password;
     user.phone_number = userData.phone_number;
-    user.rol = userData.rol;
 
     try {
       await user.save();

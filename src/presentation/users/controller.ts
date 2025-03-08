@@ -4,6 +4,7 @@ import { FinderUsersService } from './services/finder-users.service';
 import { FinderUserService } from './services/finder-user.service';
 import { UpdateUserService } from './services/update-user.service';
 import { DeleteUserService } from './services/delete-user.service';
+import { RegisterUserDto, UpdateUserDto } from '../../domain';
 
 export class UserController {
   constructor(
@@ -22,8 +23,14 @@ export class UserController {
   };
 
   register = (req: Request, res: Response) => {
+    const [error, registerUserDto] = RegisterUserDto.execute(req.body);
+
+    if (error) {
+      return res.status(422).json({ message: error });
+    }
+
     this.registerUser
-      .execute(req.body)
+      .execute(registerUserDto!)
       .then((message) => res.status(201).json(message))
       .catch((err) => res.status(500).json({ message: err.message }));
   };
@@ -39,9 +46,14 @@ export class UserController {
 
   update = (req: Request, res: Response) => {
     const { id } = req.params;
+    const [error, updateUserDto] = UpdateUserDto.execute(req.body);
+
+    if (error) {
+      return res.status(422).json({ message: error });
+    }
 
     this.updateUser
-      .execute(id, req.body)
+      .execute(id, updateUserDto!)
       .then((user) => res.status(200).json(user))
       .catch((err) => res.status(500).json({ message: err.message }));
   };
