@@ -4,7 +4,7 @@ import { FinderUsersService } from './services/finder-users.service';
 import { FinderUserService } from './services/finder-user.service';
 import { UpdateUserService } from './services/update-user.service';
 import { DeleteUserService } from './services/delete-user.service';
-import { RegisterUserDto, UpdateUserDto } from '../../domain';
+import { CustomError, RegisterUserDto, UpdateUserDto } from '../../domain';
 
 export class UserController {
   constructor(
@@ -15,11 +15,20 @@ export class UserController {
     private readonly deleteUser: DeleteUserService
   ) {}
 
+  private handleError = (error: unknown, res: Response) => {
+    if (error instanceof CustomError) {
+      return res.status(error.statusCode).json({ message: error.message });
+    }
+
+    console.error(error);
+    return res.status(500).json({ message: 'Something went very wrong🧨' });
+  };
+
   findAll = (req: Request, res: Response) => {
     this.finderUsers
       .execute()
       .then((users) => res.status(200).json(users))
-      .catch((err) => res.status(500).json({ message: err.message }));
+      .catch((err) => this.handleError(err, res));
   };
 
   register = (req: Request, res: Response) => {
@@ -32,7 +41,7 @@ export class UserController {
     this.registerUser
       .execute(registerUserDto!)
       .then((message) => res.status(201).json(message))
-      .catch((err) => res.status(500).json({ message: err.message }));
+      .catch((err) => this.handleError(err, res));
   };
 
   findOne = (req: Request, res: Response) => {
@@ -41,7 +50,7 @@ export class UserController {
     this.finderUser
       .execute(id)
       .then((user) => res.status(200).json(user))
-      .catch((err) => res.status(500).json({ message: err.message }));
+      .catch((err) => this.handleError(err, res));
   };
 
   update = (req: Request, res: Response) => {
@@ -55,7 +64,7 @@ export class UserController {
     this.updateUser
       .execute(id, updateUserDto!)
       .then((user) => res.status(200).json(user))
-      .catch((err) => res.status(500).json({ message: err.message }));
+      .catch((err) => this.handleError(err, res));
   };
 
   delete = (req: Request, res: Response) => {
@@ -63,6 +72,6 @@ export class UserController {
     this.deleteUser
       .execute(id)
       .then(() => res.status(204).json(null))
-      .catch((err) => res.status(500).json({ message: err.message }));
+      .catch((err) => this.handleError(err, res));
   };
 }

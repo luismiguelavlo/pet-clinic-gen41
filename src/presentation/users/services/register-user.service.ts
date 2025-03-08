@@ -1,5 +1,5 @@
 import { User } from '../../../data/postgres/models/user.model';
-import { RegisterUserDto } from '../../../domain';
+import { CustomError, RegisterUserDto } from '../../../domain';
 
 export class RegisterUserService {
   async execute(userData: RegisterUserDto) {
@@ -15,9 +15,20 @@ export class RegisterUserService {
       return {
         message: 'User created successfully',
       };
-    } catch (error) {
-      console.log(error);
-      throw new Error('An error occurred while registering the user');
+    } catch (error: any) {
+      this.throwException(error);
     }
+  }
+
+  private throwException(error: any) {
+    if (error.code === '23505') {
+      throw CustomError.conflict('Email already in use');
+    }
+
+    if (error.code === '22P02') {
+      throw CustomError.unprocessableEntity('Invalid data type');
+    }
+
+    throw CustomError.internalServer('Error trying to create user');
   }
 }

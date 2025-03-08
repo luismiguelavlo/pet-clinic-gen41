@@ -1,5 +1,5 @@
 import { User } from '../../../data/postgres/models/user.model';
-import { UpdateUserDto } from '../../../domain';
+import { CustomError, UpdateUserDto } from '../../../domain';
 
 export class UpdateUserService {
   async execute(userId: string, userData: UpdateUserDto) {
@@ -14,7 +14,7 @@ export class UpdateUserService {
         message: 'User updated successfully',
       };
     } catch (error) {
-      throw new Error('An error occurred while updating the user');
+      this.throwException(error);
     }
   }
 
@@ -28,9 +28,21 @@ export class UpdateUserService {
     });
 
     if (!user) {
-      throw new Error(`User with id: ${userId} not found`);
+      throw CustomError.notFound(`User with id: ${userId} not found`);
     }
 
     return user;
+  }
+
+  private throwException(error: any) {
+    if (error.code === '23505') {
+      throw CustomError.conflict('Email already in use');
+    }
+
+    if (error.code === '22P02') {
+      throw CustomError.unprocessableEntity('Invalid data type');
+    }
+
+    throw CustomError.internalServer('Error trying to create user');
   }
 }

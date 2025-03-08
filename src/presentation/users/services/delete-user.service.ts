@@ -1,4 +1,5 @@
 import { User } from '../../../data/postgres/models/user.model';
+import { CustomError } from '../../../domain';
 
 export class DeleteUserService {
   async execute(userId: string) {
@@ -9,7 +10,7 @@ export class DeleteUserService {
     try {
       await user.save();
     } catch (error) {
-      throw new Error('An error occurred while deleting the user');
+      throw CustomError.internalServer('Error trying to delete user');
     }
   }
 
@@ -23,7 +24,7 @@ export class DeleteUserService {
     });
 
     if (!user) {
-      throw new Error(`User with id: ${userId} not found`);
+      throw CustomError.notFound(`User with id: ${userId} not found`);
     }
 
     return user;
