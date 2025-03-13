@@ -4,7 +4,14 @@ import { FinderUsersService } from './services/finder-users.service';
 import { FinderUserService } from './services/finder-user.service';
 import { UpdateUserService } from './services/update-user.service';
 import { DeleteUserService } from './services/delete-user.service';
-import { CustomError, RegisterUserDto, UpdateUserDto } from '../../domain';
+import {
+  CustomError,
+  LoginUserDto,
+  RegisterUserDto,
+  UpdateUserDto,
+} from '../../domain';
+import { LoginUserService } from './services/login-user.service';
+import { envs } from '../../config';
 
 export class UserController {
   constructor(
@@ -12,7 +19,8 @@ export class UserController {
     private readonly finderUsers: FinderUsersService,
     private readonly finderUser: FinderUserService,
     private readonly updateUser: UpdateUserService,
-    private readonly deleteUser: DeleteUserService
+    private readonly deleteUser: DeleteUserService,
+    private readonly loginUser: LoginUserService
   ) {}
 
   private handleError = (error: unknown, res: Response) => {
@@ -72,6 +80,27 @@ export class UserController {
     this.deleteUser
       .execute(id)
       .then(() => res.status(204).json(null))
+      .catch((err) => this.handleError(err, res));
+  };
+
+  login = (req: Request, res: Response) => {
+    const [error, loginUserDto] = LoginUserDto.execute(req.body);
+    if (error) {
+      return res.status(422).json({ message: error });
+    }
+
+    this.loginUser
+      .execute(loginUserDto!)
+      .then((data) => {
+        res.cookie('token', data.token, {
+          httpOnly: true,
+          secure: envs.NODE_ENV === 'production',
+          sameSite: 'strict',
+          maxAge: 3 * 60 * 60 * 1000,
+        });
+
+        return res.status(200).json({ user: data.user });
+      })
       .catch((err) => this.handleError(err, res));
   };
 }

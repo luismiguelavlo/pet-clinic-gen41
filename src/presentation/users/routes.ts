@@ -5,6 +5,7 @@ import { RegisterUserService } from './services/register-user.service';
 import { FinderUserService } from './services/finder-user.service';
 import { UpdateUserService } from './services/update-user.service';
 import { DeleteUserService } from './services/delete-user.service';
+import { LoginUserService } from './services/login-user.service';
 
 export class UserRoutes {
   static get routes(): Router {
@@ -15,13 +16,15 @@ export class UserRoutes {
     const finderUser = new FinderUserService();
     const updateUser = new UpdateUserService();
     const deleteUser = new DeleteUserService();
+    const loginUser = new LoginUserService();
 
     const controller = new UserController(
       registerUser,
       finderUsers,
       finderUser,
       updateUser,
-      deleteUser
+      deleteUser,
+      loginUser
     );
 
     router.get('/', controller.findAll);
@@ -29,6 +32,7 @@ export class UserRoutes {
     router.get('/:id', controller.findOne);
     router.patch('/:id', controller.update);
     router.delete('/:id', controller.delete);
+    router.post('/login', controller.login);
 
     return router;
   }
