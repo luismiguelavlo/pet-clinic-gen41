@@ -103,4 +103,13 @@ export class UserController {
       })
       .catch((err) => this.handleError(err, res));
   };
+
+  validateAccount = (req: Request, res: Response) => {
+    const { token } = req.params;
+
+    this.registerUser
+      .validateAccount(token)
+      .then(() => res.send('Email validated sucessfully'))
+      .catch((err) => this.handleError(err, res));
+  };
 }
