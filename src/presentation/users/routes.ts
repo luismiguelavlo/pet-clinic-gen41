@@ -8,6 +8,7 @@ import { DeleteUserService } from './services/delete-user.service';
 import { LoginUserService } from './services/login-user.service';
 import { EmailService } from '../common/services/email.service';
 import { envs } from '../../config';
+import { AuthMiddleware } from '../common/middlewares/auth.middleware';
 
 export class UserRoutes {
   static get routes(): Router {
@@ -36,13 +37,14 @@ export class UserRoutes {
       loginUser
     );
 
-    router.get('/', controller.findAll);
     router.post('/register', controller.register);
+    router.post('/login', controller.login);
+    router.get('/validate-account/:token', controller.validateAccount);
+    router.use(AuthMiddleware.protect);
+    router.get('/', controller.findAll);
     router.get('/:id', controller.findOne);
     router.patch('/:id', controller.update);
     router.delete('/:id', controller.delete);
-    router.post('/login', controller.login);
-    router.get('/validate-account/:token', controller.validateAccount);
 
     return router;
   }
