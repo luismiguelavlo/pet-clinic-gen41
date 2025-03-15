@@ -1,9 +1,5 @@
 import { Request, Response } from 'express';
-import { RegisterUserService } from './services/register-user.service';
-import { FinderUsersService } from './services/finder-users.service';
-import { FinderUserService } from './services/finder-user.service';
-import { UpdateUserService } from './services/update-user.service';
-import { DeleteUserService } from './services/delete-user.service';
+
 import {
   CustomError,
   LoginUserDto,
@@ -12,6 +8,13 @@ import {
 } from '../../domain';
 import { LoginUserService } from './services/login-user.service';
 import { envs } from '../../config';
+import {
+  DeleteUserService,
+  FinderUserService,
+  FinderUsersService,
+  RegisterUserService,
+  UpdateUserService,
+} from './services';
 
 export class UserController {
   constructor(

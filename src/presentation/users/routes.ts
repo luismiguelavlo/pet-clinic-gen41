@@ -9,6 +9,7 @@ import { LoginUserService } from './services/login-user.service';
 import { EmailService } from '../common/services/email.service';
 import { envs } from '../../config';
 import { AuthMiddleware } from '../common/middlewares/auth.middleware';
+import { UserRole } from '../../data/postgres/models/user.model';
 
 export class UserRoutes {
   static get routes(): Router {
@@ -44,7 +45,11 @@ export class UserRoutes {
     router.get('/', controller.findAll);
     router.get('/:id', controller.findOne);
     router.patch('/:id', controller.update);
-    router.delete('/:id', controller.delete);
+    router.delete(
+      '/:id',
+      AuthMiddleware.restrictTo(UserRole.ADMIN),
+      controller.delete
+    );
 
     return router;
   }

@@ -1,13 +1,23 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Pet } from './pet.model';
 
 @Entity()
 export class Specie extends BaseEntity {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column("varchar", {
+  @Column('varchar', {
     length: 30,
     nullable: false,
   })
   name: string;
+
+  @OneToOne(() => Pet, (pet) => pet.specie)
+  pet: Pet;
 }

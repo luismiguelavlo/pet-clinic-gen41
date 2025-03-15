@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { JwtAdapter } from '../../../config';
-import { User } from '../../../data/postgres/models/user.model';
+import { User, UserRole } from '../../../data/postgres/models/user.model';
 
 export class AuthMiddleware {
   static async protect(req: Request, res: Response, next: NextFunction) {
@@ -27,4 +27,15 @@ export class AuthMiddleware {
       return res.status(500).json({ message: 'internal server error...' });
     }
   }
+
+  static restrictTo = (...roles: UserRole[]) => {
+    return (req: Request, res: Response, next: NextFunction) => {
+      if (!roles.includes(req.body.sessionUser.rol)) {
+        return res
+          .status(403)
+          .json({ message: 'You are not authorizated to access this route' });
+      }
+      next();
+    };
+  };
 }
