@@ -19,21 +19,24 @@ export class PetController {
   };
 
   findAll = (req: Request, res: Response) => {
+    const user = req.body.sessionUser;
+
     this.finderPetService
-      .execute()
+      .execute(user.id)
       .then((data) => res.status(200).json(data))
       .catch((error) => this.handleError(error, res));
   };
 
   create = (req: Request, res: Response) => {
     const [error, createPetDto] = CreatePetDto.execute(req.body);
+    const user = req.body.sessionUser;
 
     if (error) {
       return res.status(422).json({ message: error });
     }
 
     this.creatorPetService
-      .execute(createPetDto!)
+      .execute(createPetDto!, user)
       .then((data) => res.status(201).json(data))
       .catch((error) => this.handleError(error, res));
   };
