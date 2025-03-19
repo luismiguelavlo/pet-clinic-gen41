@@ -15,6 +15,7 @@ export class Specie extends BaseEntity {
   @Column('varchar', {
     length: 30,
     nullable: false,
+    unique: true,
   })
   name: string;
 
