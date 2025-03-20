@@ -20,6 +20,5 @@ export class Doctor extends BaseEntity {
   speciality: string;
 
   @OneToOne(() => User, (user) => user.doctor)
-  @JoinColumn({ name: 'user_id' })
   user: User;
 }

@@ -2,6 +2,7 @@ import {
   BaseEntity,
   Column,
   Entity,
+  JoinColumn,
   ManyToMany,
   OneToMany,
   OneToOne,
@@ -73,5 +74,6 @@ export class User extends BaseEntity {
   appointment: Appointment[];
 
   @OneToOne(() => Doctor, (doctor) => doctor.user)
+  @JoinColumn({ name: 'speciality' })
   doctor: Doctor;
 }
