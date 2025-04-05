@@ -11,7 +11,7 @@ export class AppRoutes {
 
     router.get('/health-check', (req: Request, res: Response) => {
       console.log(req.ip);
-      res.status(200).json({ message: 'API is healthy' });
+      res.status(200).json({ message: 'API is healthy', ip: req.ip });
     });
     router.use('/api/users', UserRoutes.routes);
     router.use('/api/doctors', DoctorRoutes.routes);
