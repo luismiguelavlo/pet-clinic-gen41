@@ -33,8 +33,12 @@ export class AppointmentController {
   };
 
   findAll = (req: Request, res: Response) => {
+    const { term, id } = req.params;
+    const { status = 'pending' } = req.query;
+    console.log(req.query);
+
     this.finderAppointment
-      .execute()
+      .execute(term, id, status as string)
       .then((data) => res.status(200).json(data))
       .catch((error) => this.handleError(error, res));
   };

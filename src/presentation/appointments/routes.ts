@@ -23,7 +23,7 @@ export class AppointmentsRoute {
     );
 
     router.post('/', controller.create);
-    router.get('/', controller.findAll);
+    router.get('/:term/:id', controller.findAll);
 
     return router;
   }

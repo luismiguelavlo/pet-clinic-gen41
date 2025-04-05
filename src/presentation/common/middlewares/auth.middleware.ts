@@ -21,6 +21,8 @@ export class AuthMiddleware {
       if (!user) return res.status(401).json({ message: 'Invalid user' });
 
       req.body.sessionUser = user;
+      req.setTimeout(5000); // Set request timeout to 5 seconds
+      res.setTimeout(5000);
       next();
     } catch (error) {
       console.error(error);

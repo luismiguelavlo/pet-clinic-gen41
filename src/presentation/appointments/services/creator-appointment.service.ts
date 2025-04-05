@@ -1,3 +1,4 @@
+import { envs } from '../../../config';
 import { Appointment } from '../../../data/postgres/models/appointment.model';
 import { User } from '../../../data/postgres/models/user.model';
 import { CustomError } from '../../../domain';
@@ -39,6 +40,9 @@ export class CreatorAppointmentService {
         message: 'appointment registered successfully',
       };
     } catch (error) {
+      if (envs.ENABLED_DEBUG) {
+        console.log(error);
+      }
       throw CustomError.internalServer('Error create appointment');
     }
   }
