@@ -1,4 +1,10 @@
-import { encriptAdapter, envs, JwtAdapter } from '../../../config';
+import {
+  encriptAdapter,
+  envs,
+  generateUUID,
+  JwtAdapter,
+  UploadFilesCloudAdapter,
+} from '../../../config';
 import { User } from '../../../data/postgres/models/user.model';
 import { CustomError, RegisterUserDto } from '../../../domain';
 import { EmailService } from '../../common/services/email.service';
@@ -6,13 +12,31 @@ import { EmailService } from '../../common/services/email.service';
 export class RegisterUserService {
   constructor(private readonly emailService: EmailService) {}
 
-  async execute(userData: RegisterUserDto) {
+  async execute(
+    userData: RegisterUserDto,
+    file: Express.Multer.File | undefined
+  ) {
     const user = new User();
+    let urlPhoto = '';
+    let path = '';
 
     user.fullname = userData.fullname;
     user.email = userData.email;
     user.password = this.encriptPassword(userData.password);
     user.phone_number = userData.phone_number;
+
+    if (file?.originalname && file?.originalname.length > 0) {
+      path = `users/${generateUUID()}-${file.originalname}`;
+
+      const imgName = await UploadFilesCloudAdapter.uploadSingleFile({
+        bucketName: envs.AWS_BUCKET_NAME,
+        key: path,
+        body: file.buffer,
+        contentType: file.mimetype,
+      });
+
+      user.photo_url = imgName;
+    }
 
     try {
       await user.save();

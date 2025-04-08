@@ -1,4 +1,9 @@
-import { encriptAdapter, envs, JwtAdapter } from '../../../config';
+import {
+  encriptAdapter,
+  envs,
+  JwtAdapter,
+  UploadFilesCloudAdapter,
+} from '../../../config';
 import { User } from '../../../data/postgres/models/user.model';
 import { CustomError, LoginUserDto } from '../../../domain';
 
@@ -13,6 +18,10 @@ export class LoginUserService {
       { id: user!.id },
       envs.JWT_EXPIRE_IN
     );
+    const imgUrl = await UploadFilesCloudAdapter.getFile({
+      bucketName: envs.AWS_BUCKET_NAME,
+      key: user!.photo_url,
+    });
     //4. Return the token
     return {
       token,
@@ -21,6 +30,7 @@ export class LoginUserService {
         email: user?.email,
         phone: user?.phone_number,
         rol: user?.rol,
+        photo: imgUrl,
       },
     };
   }

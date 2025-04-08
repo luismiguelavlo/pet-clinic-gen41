@@ -51,6 +51,7 @@ export class User extends BaseEntity {
   @Column('varchar', {
     length: 255,
     nullable: true,
+    default: 'users/blank-profile-picture-973460_640.webp',
   })
   photo_url: string;
 

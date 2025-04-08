@@ -20,4 +20,9 @@ export const envs = {
   SEND_MAIL: get('SEND_MAIL').required().asBool(),
 
   ENABLED_DEBUG: get('ENABLED_DEBUG').required().asBool(),
+
+  AWS_ACCESS_KEY: get('AWS_ACCESS_KEY').required().asString(),
+  AWS_SECRET_KEY: get('AWS_SECRET_KEY').required().asString(),
+  AWS_REGION: get('AWS_REGION').required().asString(),
+  AWS_BUCKET_NAME: get('AWS_BUCKET_NAME').required().asString(),
 };

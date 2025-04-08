@@ -10,6 +10,7 @@ import { EmailService } from '../common/services/email.service';
 import { envs } from '../../config';
 import { AuthMiddleware } from '../common/middlewares/auth.middleware';
 import { UserRole } from '../../data/postgres/models/user.model';
+import { uploadSingleFile } from '../../config/upload-files.adapter';
 
 export class UserRoutes {
   static get routes(): Router {
@@ -38,7 +39,7 @@ export class UserRoutes {
       loginUser
     );
 
-    router.post('/register', controller.register);
+    router.post('/register', uploadSingleFile('photo'), controller.register);
     router.post('/login', controller.login);
     router.get('/validate-account/:token', controller.validateAccount);
     router.use(AuthMiddleware.protect);

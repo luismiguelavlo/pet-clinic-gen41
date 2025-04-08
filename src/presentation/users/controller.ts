@@ -50,7 +50,7 @@ export class UserController {
     }
 
     this.registerUser
-      .execute(registerUserDto!)
+      .execute(registerUserDto!, req.file)
       .then((message) => res.status(201).json(message))
       .catch((err) => this.handleError(err, res));
   };
