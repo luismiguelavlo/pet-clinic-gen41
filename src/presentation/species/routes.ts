@@ -2,6 +2,9 @@ import { Router } from 'express';
 import { CreatorSpeciesService } from './services/creator-species.service';
 import { FinderSpeciesService } from './services/finder-species.service';
 import { SpeciesController } from './controller';
+import { AuthMiddleware } from '../common/middlewares/auth.middleware';
+import { UserRole } from '../../data/postgres/models/user.model';
+import { uploadMultipleFiles } from '../../config';
 
 export class SpeciesRoutes {
   static get routes(): Router {
@@ -16,7 +19,13 @@ export class SpeciesRoutes {
     );
 
     router.get('/', controller.findAll);
-    router.post('/', controller.create);
+    router.use(AuthMiddleware.protect);
+    router.post(
+      '/',
+      AuthMiddleware.restrictTo(UserRole.ADMIN),
+      uploadMultipleFiles('imgs', 3),
+      controller.create
+    );
 
     return router;
   }

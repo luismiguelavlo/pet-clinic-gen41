@@ -5,7 +5,6 @@ import { User, UserRole } from '../../../data/postgres/models/user.model';
 export class AuthMiddleware {
   static async protect(req: Request, res: Response, next: NextFunction) {
     const token = req.cookies.token;
-
     if (!token) return res.status(401).json({ message: 'No token provided ' });
 
     try {
@@ -21,6 +20,7 @@ export class AuthMiddleware {
       if (!user) return res.status(401).json({ message: 'Invalid user' });
 
       req.body.sessionUser = user;
+      console.log(req.body);
       req.setTimeout(5000); // Set request timeout to 5 seconds
       res.setTimeout(5000);
       next();

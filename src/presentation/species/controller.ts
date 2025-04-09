@@ -34,7 +34,7 @@ export class SpeciesController {
     }
 
     this.creatorSpecieService
-      .execute(specieData!)
+      .execute(specieData!, req.files as Express.Multer.File[])
       .then((data) => res.status(201).json(data))
       .catch((error) => this.handleError(error, res));
   };

@@ -1,4 +1,4 @@
-import express, { Router } from 'express';
+import express, { Request, Response, Router } from 'express';
 import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 import cors from 'cors';
@@ -62,6 +62,11 @@ export class Server {
     this.app.use(hpp());
 
     this.app.use(this.routes);
+    this.app.use('*', (req: Request, res: Response) => {
+      res.status(404).json({
+        message: `Route not found: ${req.originalUrl}`,
+      });
+    });
 
     this.app.listen(this.port, () => {
       console.log(`Server is running on port ${this.port} 😒!`);

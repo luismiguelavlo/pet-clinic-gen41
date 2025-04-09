@@ -20,10 +20,10 @@ export class Specie extends BaseEntity {
   name: string;
 
   @Column('varchar', {
-    length: 255,
+    array: true,
     nullable: true,
   })
-  img_url: string;
+  img_url: string[];
 
   @OneToOne(() => Pet, (pet) => pet.specie)
   pet: Pet;
